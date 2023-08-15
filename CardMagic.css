@@ -1,0 +1,30 @@
+body{
+    background-color: green;
+    text-align: center;
+}
+
+h1{
+    color:#F1C93B;
+    border: 2px solid #FAE392;
+    display: inline-block;
+    padding: 10px;
+    
+}
+
+img{
+    height: 100px;
+    width: 100px;
+    border: 2px solid black;
+}
+
+button{
+    background-color: #FAE392;
+    border: 2px solid red;
+    padding: 15 px 32 px;
+    text-align: center;
+    display: block;
+    font-size: 16px; ;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
