@@ -4,10 +4,11 @@ body{
 }
 
 h1{
-    color:#F1C93B;
+    color:#a64503;
     border: 2px solid #FAE392;
     display: inline-block;
     padding: 10px;
+    background-color: chartreuse;
     
 }
 
@@ -27,4 +28,10 @@ button{
     margin: auto;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+footer{
+    text-align: left;
+    color: azure;
+    background-color: black;
+   padding-left: 10px;
 }
