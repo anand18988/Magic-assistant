@@ -28,10 +28,19 @@ button{
     margin: auto;
     margin-top: 10px;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 footer{
     text-align: left;
     color: azure;
     background-color: black;
    padding-left: 10px;
+}
+p{
+    color:black;
+    border: 2px solid red;
+    padding: 10px;
+    background-color: chartreuse;
+    text-align: left;
+    font-size: 16 px;
 }

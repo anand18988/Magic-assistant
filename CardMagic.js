@@ -1,13 +1,14 @@
 
-const cards = document.getElementById('cards')
-const fpath = "images/";
+const cards = document.getElementById('cards')// getting div as a container for images.
+const fpath = "images/";//name of path that contains images.
 
 var number, suit, k=0,m=0, st,first;
 var big,small,steps,temp,lrg,mid,sml,found=0;
-var onceclicked=true;
+var onceclickedFrCard=true, onceclickedFrHint=true;
+var s,m,l, arrangementOrder;
 const cardArr = [], clickedItemArr=[], finalArranged=[], finalDisplay=[];
 
-
+//for generating file names and storing in an array.
 for (let i=1;i<=4;i++){
     for(let j=1;j<=13;j++){
         if (i===1){
@@ -23,50 +24,44 @@ for (let i=1;i<=4;i++){
         const fileName= j+suit;
         cardArr[k]=fileName;
         k++;
-        //const img=document.createElement('img');
-       // img.src=fpath+ fileName;
-       // img.alt= number+'of'+suit;
-       // cards.appendChild(img);
+       
     }
 }
-
+// creating temperoray array and inserting all file name into it.
 const tempArr = cardArr.slice();
-// shuffle the cards 
+// shuffle the cards on refresh.
 while(tempArr.length!=0){
     m = Math.floor(Math.random()*52);
  if(m<tempArr.length){
     const img=document.createElement('img');
     img.src=fpath+ tempArr[m]+'.png';
     img.alt= tempArr[m];
-    //img.id=tempArr[m];
-    img.addEventListener('click', imgClicked);
+    img.addEventListener('click', imgClicked);// event listner added on image to select the image.
     cards.appendChild(img);
-    tempArr.splice(m,1);
+    tempArr.splice(m,1);// removing the cell once the image is displayed.
  }
 }
 
-
-//img.addEventListener('click', imgClicked);
-//console.log(nodeList[6].id);
-
+// when image is clicked below function is called to creat new array of clicked images.
 function imgClicked(){
     var alreadyPresent=false,index;
-   // console.log(this.id);
     
+    //checks the clicked item is already present in the array
     for(let pos=0;pos<clickedItemArr.length;pos++) {
         if(clickedItemArr[pos]===this){
             alreadyPresent = true;
             index=pos;
         }
     }
+    // if clicked image is not already present in array then it is pushed in the array 
     if(!alreadyPresent){
         if(clickedItemArr.length<5){
         clickedItemArr.push(this);
-        this.style.border = "10px solid yellow";
+        this.style.border = "10px solid yellow";// changing the border color of selected image.
         }else{
             alert("5 card selected, remember all cards and press submit!!")
         }
-    }else {
+    }else {// if already present in array then it will be de-selected and removed from array 
         this.style.border = "2px solid black";
         clickedItemArr.splice(index,1);
         
@@ -74,29 +69,29 @@ function imgClicked(){
     
 }
 
+// when submit button is clicked this function is called.
 function submitButtonClicked(){
-    if(clickedItemArr.length===5){
-        //alert("weldone!!")
-       // console.log(clickedItemArr[2].alt);
+    if(clickedItemArr.length===5){// when all 5 cards are selected then only below action will happen.
+       
 
-        document.getElementById("heading").innerHTML="You choose these cards:"
-        document.getElementById("cards").innerHTML="";
-        document.getElementById("press").remove();
+        document.getElementById("heading").innerHTML="You choose these cards:"// heading will be changed.
+        document.getElementById("cards").innerHTML="";// all previous images will be removed.
+        document.getElementById("press").remove();// button will be removed.
 
-        // display 4 out of 5 selected cards
+        // display 5 selected cards
+        const ndList=[];
         for (let m=0; m<clickedItemArr.length; m++) 
         {
             const img=document.createElement('img');
             img.src=clickedItemArr[m].src;
             img.alt= clickedItemArr[m].alt;
             
-            //console.log(img.alt);
+            //breaking file name into two parts - suit and denomination. for ranking purpose.
             st = img.alt;
             suit= st.substring(st.length-1,st.length);
             first = st.substring(0,st.length-1);
             img.deno = parseInt(first);
-            //console.log(first+" "+suit);
-            
+            //changing suit name into numbers for ranking.
             if(suit==='c'){
                 img.suitRank=1;
             }else if(suit==='d'){
@@ -106,45 +101,46 @@ function submitButtonClicked(){
             }else if(suit==='s'){
                 img.suitRank=4;
             }
-            cards.appendChild(img);
-            console.log(img.suitRank+" "+img.deno);
+            ndList.push(img);//stored in new array.
+            
         }
-
-        const nodeList = [].slice.call(document.querySelectorAll('img'));
+      
+        
+        // finding 2 cards of equal suit. A checking how many steps is difference between these cards, and storing in finalArranged array 0th and 4th cell in order.Then removing these 2 cards from nodlist array.
         for (m=0;m<5 && found===0;m++){
             for(let n=m+1;n<5 && found===0;n++){
-                if(nodeList[m].suitRank===nodeList[n].suitRank){
+                if(ndList[m].suitRank===ndList[n].suitRank){
                     
-                    big=nodeList[m].deno;
-                    small=nodeList[n].deno;
-                    finalArranged[0]=nodeList[n];
-                    finalArranged[4]=nodeList[m];
+                    big=ndList[m].deno;
+                    small=ndList[n].deno;
+                    finalArranged[0]=ndList[n];
+                    finalArranged[4]=ndList[m];
                     
                     if(big<small){
-                        finalArranged[0]=nodeList[m];
-                        finalArranged[4]=nodeList[n];
+                        finalArranged[0]=ndList[m];
+                        finalArranged[4]=ndList[n];
                     }
 
                      steps=Math.abs(big-small);
                     if(steps<=6){
                         
-                        nodeList.splice(m,1);
-                        nodeList.splice(n-1,1);
+                        ndList.splice(m,1);
+                        ndList.splice(n-1,1);
                        found=1;
                       
                     } else if(big>small){
                         steps=13-big+small;
-                        finalArranged[0]=nodeList[m];
-                        finalArranged[4]=nodeList[n];
-                        nodeList.splice(m,1);
-                        nodeList.splice(n-1,1);
+                        finalArranged[0]=ndList[m];
+                        finalArranged[4]=ndList[n];
+                        ndList.splice(m,1);
+                        ndList.splice(n-1,1);
                        found=1;
                       } else if(big<small){
                          steps=13-small+big;
-                         finalArranged[0]=nodeList[n];
-                         finalArranged[4]=nodeList[m];
-                         nodeList.splice(m,1);
-                         nodeList.splice(n-1,1);
+                         finalArranged[0]=ndList[n];
+                         finalArranged[4]=ndList[m];
+                         ndList.splice(m,1);
+                         ndList.splice(n-1,1);
                          found=1;
                        }
                     
@@ -152,63 +148,72 @@ function submitButtonClicked(){
                 }
             }
         }
-
+        
+        // arranging remaining cards in ndList in assending order
         for(m=0;m<3;m++){
             for(n=m+1;n<3;n++){
-                if(nodeList[n].deno<nodeList[m].deno){
-                    temp=nodeList[m];
-                    nodeList[m]=nodeList[n];
-                    nodeList[n]=temp;
-                }else if(nodeList[n].deno===nodeList[m].deno){
-                     if(nodeList[n].suitRank<nodeList[m].suitRank){
-                        temp=nodeList[m];
-                        nodeList[m]=nodeList[n];
-                        nodeList[n]=temp;
+                if(ndList[n].deno<ndList[m].deno){
+                    temp=ndList[m];
+                    ndList[m]=ndList[n];
+                    ndList[n]=temp;
+                }else if(ndList[n].deno===ndList[m].deno){
+                     if(ndList[n].suitRank<ndList[m].suitRank){
+                        temp=ndList[m];
+                        ndList[m]=ndList[n];
+                        ndList[n]=temp;
 
                      }
                 }
             }
             
         }
-
+        // storing remaining cards arranged in assending order, in cell 1,2,3 of the finalArranged array.
         for(m=0;m<3;m++){
-            finalArranged[m+1]=nodeList[m];
+            finalArranged[m+1]=ndList[m];
         }
-        
-       var s,m,l;
+       
+        // according to the step difference(1-6) s,m,l will be assigned cell number.
+       
         switch(steps){
             case 1:
                 s=1;
                 m=2;
                 l=3;
+                arrangementOrder="small, medium, large"
                 break;
             case 2:
                 s=1;
                 m=3;
                 l=2;
+                arrangementOrder="small, large, medium"
                 break;
             case 3:
                 s=2;
                 m=1;
                 l=3;
+                arrangementOrder="medium, small, large"
                 break;
             case 4:
                 s=2;
                 m=3;
                 l=1;
+                arrangementOrder="medium, large, small"
                 break;
             case 5:
                 s=3;
                 m=1;
                 l=2;
+                arrangementOrder="large, small, medium"
                 break;
             case 6:
                 s=3;
                 m=2;
                 l=1;
+                arrangementOrder="large, medium, small"
                 break;    
         }
         
+        // making final array which will be displayed in desired arrangement.
         finalDisplay[0]=finalArranged[0];
         finalDisplay[1]=finalArranged[s];
         finalDisplay[2]=finalArranged[m];
@@ -218,8 +223,8 @@ function submitButtonClicked(){
         for(i=0;i<5;i++){
             console.log(finalDisplay[i].src);
           }
-          document.getElementById("cards").innerHTML="";
-
+         
+          // displaying 4 cards in required arrangement
           for (let i=0; i<finalDisplay.length-1; i++) 
           {
               const img=document.createElement('img');
@@ -234,7 +239,27 @@ function submitButtonClicked(){
         const textNode = document.createTextNode("And the remaining card is....");
         h1.appendChild(textNode);
         headGen.appendChild(h1);
-        
+
+        //button to generate hint for 5th card
+        var butn=document.createElement('button');
+        var txt = document.createTextNode("click to see hint");
+        butn.appendChild(txt);
+        hintBtn.appendChild(butn);
+        butn.addEventListener('click', hintBtnClicked);
+
+        function hintBtnClicked(){
+            if(onceclickedFrHint){  //generating image of 5th card only once.
+            //generating hint here
+            const p= document.createElement("p");
+            let strng ="-> 5th card and 1st is of same suit.<br>-> And 5th card will be "+ steps+" steps ahead of 1st card.<br>-> Arrangement of 2nd 3rd 4th card is in ("+arrangementOrder+") order which means "+ steps+" steps ahead"+" <br>-> small, medium, large=1 <br>-> small, large, medium=2 <br>-> medium, small, large=3 <br>-> medium, large, small=4 <br>-> large, small, medium=5 <br>-> large, medium, small= 6"
+            p.innerHTML=strng;
+            hint.appendChild(p);      
+            onceclickedFrHint=false;
+            }
+        }
+
+
+        //generating button to display 5th card when clicked.
         var btn=document.createElement('button');
         var text = document.createTextNode("Click to see 5th card");
         btn.appendChild(text);
@@ -242,12 +267,12 @@ function submitButtonClicked(){
         btn.addEventListener('click', btnClicked);
 
         function btnClicked(){
-            if(onceclicked){
+            if(onceclickedFrCard){  //generating image of 5th card only once.
             const img=document.createElement('img');
               img.src=finalDisplay[4].src;
               img.alt= finalDisplay[4].alt;
               btnGen.appendChild(img);
-              onceclicked=false;
+              onceclickedFrCard=false;
             }
         }
 
