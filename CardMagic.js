@@ -251,7 +251,7 @@ function submitButtonClicked(){
             if(onceclickedFrHint){  //generating image of 5th card only once.
             //generating hint here
             const p= document.createElement("p");
-            let strng ="-> 5th card and 1st is of same suit.<br>-> And 5th card will be "+ steps+" steps ahead of 1st card.<br>-> Arrangement of 2nd 3rd 4th card is in ("+arrangementOrder+") order which means "+ steps+" steps ahead"+" <br>-> small, medium, large=1 <br>-> small, large, medium=2 <br>-> medium, small, large=3 <br>-> medium, large, small=4 <br>-> large, small, medium=5 <br>-> large, medium, small= 6"
+            let strng ="-> 5th card and 1st is of same suit.<br>-> And 5th card will be "+ steps+" steps ahead of 1st card.<br>-> Arrangement of 2nd 3rd 4th card is in ("+arrangementOrder+") order which means "+ steps+" steps ahead<br><b><--------Order of 2nd,3rd and 4th card and their 'steps-value' representation-----------></b><br>->small, medium, large=1 <br>-> small, large, medium=2 <br>-> medium, small, large=3 <br>-> medium, large, small=4 <br>-> large, small, medium=5 <br>-> large, medium, small= 6"
             p.innerHTML=strng;
             hint.appendChild(p);      
             onceclickedFrHint=false;
